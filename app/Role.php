@@ -7,15 +7,19 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Role extends Model
 {
-	use SoftDeletes;
+    use SoftDeletes;
 
-	/**
-	 * @var array
-	 */
-	protected $dates = ['deleted_at'];
+    const SYSADMIN = 1;
+    const ADMIN = 2;
+    const USER = 3;
 
-	public function users()
-	{
-		return $this->hasMany('App\User');
-	}
+    /**
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+
+    public function users()
+    {
+        return $this->hasMany('App\User');
+    }
 }

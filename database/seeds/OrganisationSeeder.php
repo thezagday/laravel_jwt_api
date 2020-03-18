@@ -15,5 +15,9 @@ class OrganisationSeeder extends Seeder
 	    $itransition = new Organisation();
 	    $itransition->title = 'Itransition';
 	    $itransition->save();
+
+        $epam = new Organisation();
+        $epam->title = 'Epam';
+        $epam->save();
     }
 }

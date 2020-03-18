@@ -6,8 +6,9 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable
+class User extends Authenticatable implements JWTSubject
 {
     use Notifiable, SoftDeletes;
 
@@ -17,7 +18,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'organisation_id', 'role_id'
     ];
 
     /**
@@ -56,5 +57,27 @@ class User extends Authenticatable
 	public function role()
 	{
 		return $this->belongsTo('App\Role');
+	}
+
+	public function getJWTIdentifier()
+	{
+		return $this->getKey();
+	}
+
+	public function getJWTCustomClaims()
+	{
+		return [];
+	}
+
+	public function setPasswordAttribute($password)
+	{
+		if ( !empty($password) ) {
+			$this->attributes['password'] = bcrypt($password);
+		}
+	}
+
+	public function hasRole(int $roleId): bool
+	{
+		return $this->role->id == $roleId;
 	}
 }
